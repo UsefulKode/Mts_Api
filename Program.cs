@@ -22,11 +22,19 @@ namespace Mts_Api
             // --- Добавляем DbContext ---
             builder.Services.AddDbContext<MtsDbContext>(options =>
                 options.UseSqlServer("Server=46.182.132.89,1433;Database=MTS;User Id=sofa;Password=cjyz2605*;TrustServerCertificate=True;Encrypt=False;"));
-            // -------------------------
+            // -------------------------Scaffold-DbContext
 
-            // --- Добавляем поддержку API-контроллеров ---
-            builder.Services.AddControllers(); // ОЧЕНЬ ВАЖНО для работы ваших контроллеров!
-                                               
+
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    // Это заставит API отдавать имена полей ТАК ЖЕ, как они написаны в C#
+                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+
+                });
+
+
             builder.Services.AddAutoMapper(typeof(Program));
 
             // --- Добавляем Swagger/OpenAPI ---
